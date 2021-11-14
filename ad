@@ -1,0 +1,154 @@
+#!/bin/bash
+set -eu
+
+print_usage() {
+    cat <<EOF
+usage:
+  ${0##*/}
+  ${0##*/} -w|--wrapper <SHELL>
+  ${0##*/} --help
+chdir with file-manager
+
+options:
+  -w, --wrapper=SHELL  output evaluatable script for SHELL and exit
+      --help           print usage and exit
+
+keys:
+  +       toggle show hidden files (default: OFF)
+  -       chdir to the parent directory in file-manager
+  <CR>    chdir to the directory in file-manager
+  <C-g>   quit file-manager and chdir to the last directory
+  q       quit file-manager
+EOF
+}
+
+print_appscript() {
+    cat <<'EOF'
+" appscript:start
+let b:app = {}
+
+function! b:app.init() abort
+  let self.cwd               = getcwd()
+  let self.show_hidden_files = 0
+  let self.save_file         = getenv('SAVE_FILE')
+  setlocal buftype=nofile
+  setlocal bufhidden=hide
+  setlocal noswapfile
+  setlocal nowrap
+  nnoremap <buffer><silent> +     :<C-u>call b:app.toggle_show_hidden()<CR>
+  nnoremap <buffer><silent> -     :<C-u>call b:app.up_directory()<CR>
+  nnoremap <buffer><silent> <CR>  :<C-u>call b:app.move_directory()<CR>
+  nnoremap <buffer><silent> <C-g> :<C-u>call b:app.save_directory_and_exit()<CR>
+  nnoremap <buffer><silent> q     :<C-u>call b:app.exit()<CR>
+  call self.update_screen()
+endfunction
+
+function! b:app.update_screen() abort
+  let files = s:readdir_with_indicator(self.cwd, self.show_hidden_files)
+  let lines = [self.cwd, ''] + files
+  execute '%delete'
+  call setline(1, lines)
+  call cursor(3, 1)
+endfunction
+
+function! b:app.toggle_show_hidden() abort
+  let self.show_hidden_files = !self.show_hidden_files
+  call self.update_screen()
+endfunction
+
+function! b:app.up_directory() abort
+  let self.cwd = fnamemodify(self.cwd, ':h')
+  call self.update_screen()
+endfunction
+
+function! b:app.move_directory() abort
+  let file = substitute(getline('.'), '/$', '', '')
+  let path = fnamemodify((self.cwd ==# '/' ? '/' : self.cwd . '/') . file, ':p:h')
+  if isdirectory(path)
+    let self.cwd = path
+    call self.update_screen()
+  endif
+endfunction
+
+function! b:app.save_directory_and_exit() abort
+  if filewritable(self.save_file)
+    call writefile([self.cwd], self.save_file)
+  endif
+  exit
+endfunction
+
+function! b:app.exit() abort
+  exit
+endfunction
+
+function! s:compare_files_with_indicator(lhs, rhs)
+  if a:lhs[-1:] ==# '/' && a:rhs[-1:] !=# '/'
+    return -1
+  elseif a:lhs[-1:] !=# '/' && a:rhs[-1:] ==# '/'
+    return 1
+  endif
+  if a:lhs < a:rhs
+    return -1
+  elseif a:lhs > a:rhs
+    return 1
+  endif
+  return 0
+endfunction
+
+function! s:readdir_with_indicator(path, show_hidden_files) abort
+  let files = readdir(a:path, 1)
+  if !a:show_hidden_files
+    let files = filter(files, {_, file -> file !~# '^\.'})
+  endif
+  let files = map(files, {_, file -> isdirectory(a:path . '/' . file) ? file . '/' : file})
+  let files = sort(files, function('s:compare_files_with_indicator'))
+  return files
+endfunction
+
+call b:app.init()
+" appscript:end
+EOF
+}
+
+do_output_wrapper_script() {
+    local shell=$1
+    case $shell in
+        bash)
+            cat <<EOF
+ad() {
+    if [[ \$# -ge 1 ]]; then
+        command -- ad "\$@"
+        return
+    fi
+    local nextpath
+    nextpath=\$(command -- ad "\$@")
+    if [[ -n \$nextpath ]]; then
+        cd "\$nextpath" || return
+    fi
+}
+EOF
+            ;;
+        *)
+            printf "%s\n" "${0##*/}: unsupported shell '$1'" >&2
+            exit 1
+            ;;
+    esac
+}
+
+do_normal() {
+    cat <(SAVE_FILE=>(cat) vim -u NONE -N -n -i NONE -S <(print_appscript) < /dev/tty > /dev/tty)
+}
+
+if [[ $# -eq 1 && $1 == --help ]]; then
+    print_usage
+    exit 0
+elif [[ $# -eq 2 && ( $1 == -w || $1 == --wrapper ) ]]; then
+    do_output_wrapper_script "$2"
+    exit 0
+elif [[ $# -eq 0 ]]; then
+    do_normal
+    exit 0
+else
+    printf "%s\n" "${0##*/}: unrecognized argument pattern" >&2
+    exit 1
+fi
