@@ -7,7 +7,7 @@ usage:
   ${0##*/}
   ${0##*/} -w|--wrapper <SHELL>
   ${0##*/} --help
-chdir with file-manager
+chdir with file-manager.
 
 options:
   -w, --wrapper=SHELL  output evaluatable script for SHELL and exit
@@ -121,19 +121,19 @@ do_output_wrapper_script() {
   local shell=$1
   case $shell in
     bash)
-      cat <<EOF
-ad() {
-    if [[ \$# -ge 1 ]]; then
-        command -- ad "\$@"
-        return
-    fi
-    local nextpath
-    nextpath=\$(command -- ad "\$@")
-    if [[ -n \$nextpath ]]; then
-        cd "\$nextpath" || return
-    fi
-  }
-EOF
+      cat <<'      EOF' | sed 's/^ \{6\}//'
+      ad() {
+        if [[ \$# -ge 1 ]]; then
+            command -- ad "\$@"
+            return
+        fi
+        local nextpath
+        nextpath=\$(command -- ad "\$@")
+        if [[ -n \$nextpath ]]; then
+            cd "\$nextpath" || return
+        fi
+      }
+      EOF
       ;;
     *)
       printf "%s\n" "${0##*/}: unsupported shell '$1'" >&2
