@@ -123,14 +123,14 @@ do_output_wrapper_script() {
     bash)
       cat <<'      EOF' | sed 's/^ \{6\}//'
       ad() {
-        if [[ \$# -ge 1 ]]; then
-            command -- ad "\$@"
+        if [[ $# -ge 1 ]]; then
+            command -- ad "$@"
             return
         fi
         local nextpath
-        nextpath=\$(command -- ad "\$@")
-        if [[ -n \$nextpath ]]; then
-            cd "\$nextpath" || return
+        nextpath=$(command -- ad "$@")
+        if [[ -n $nextpath ]]; then
+            cd "$nextpath" || return
         fi
       }
       EOF
