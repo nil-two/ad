@@ -1,8 +1,8 @@
 #!/bin/bash
 set -eu
 
-print_usage() {
-    cat <<EOF
+usage() {
+  cat <<EOF
 usage:
   ${0##*/}
   ${0##*/} -w|--wrapper <SHELL>
@@ -22,33 +22,27 @@ keys:
 EOF
 }
 
-print_appscript() {
-    cat <<'EOF'
+appscript() {
+  cat <<'EOF'
 " appscript:start
 let b:app = {}
 
-function! b:app.init() abort
-  let self.cwd               = getcwd()
-  let self.show_hidden_files = 0
-  let self.save_file         = getenv('SAVE_FILE')
+function! b:app.start() abort
   setlocal buftype=nofile
   setlocal bufhidden=hide
   setlocal noswapfile
   setlocal nowrap
+
   nnoremap <buffer><silent> +     :<C-u>call b:app.toggle_show_hidden()<CR>
   nnoremap <buffer><silent> -     :<C-u>call b:app.up_directory()<CR>
   nnoremap <buffer><silent> <CR>  :<C-u>call b:app.move_directory()<CR>
   nnoremap <buffer><silent> <C-g> :<C-u>call b:app.save_directory_and_exit()<CR>
   nnoremap <buffer><silent> q     :<C-u>call b:app.exit()<CR>
-  call self.update_screen()
-endfunction
 
-function! b:app.update_screen() abort
-  let files = s:readdir_with_indicator(self.cwd, self.show_hidden_files)
-  let lines = [self.cwd, ''] + files
-  execute '%delete'
-  call setline(1, lines)
-  call cursor(3, 1)
+  let self.show_hidden_files = v:false
+  let self.cwd               = getcwd()
+  let self.save_file         = getenv('SAVE_FILE')
+  call self.update_screen()
 endfunction
 
 function! b:app.toggle_show_hidden() abort
@@ -77,8 +71,26 @@ function! b:app.save_directory_and_exit() abort
   exit
 endfunction
 
+function! b:app.update_screen() abort
+  execute '%delete'
+  let files = s:readdir_with_indicator(self.cwd, self.show_hidden_files)
+  let lines = [self.cwd, ''] + files
+  call setline(1, lines)
+  call cursor(3, 1)
+endfunction
+
 function! b:app.exit() abort
-  exit
+  quit!
+endfunction
+
+function! s:readdir_with_indicator(path, show_hidden_files) abort
+  let files = readdir(a:path, 1)
+  if !a:show_hidden_files
+    let files = filter(files, {_, file -> file !~# '^\.'})
+  endif
+  let files = map(files, {_, file -> isdirectory(a:path . '/' . file) ? file . '/' : file})
+  let files = sort(files, function('s:compare_files_with_indicator'))
+  return files
 endfunction
 
 function! s:compare_files_with_indicator(lhs, rhs)
@@ -95,26 +107,16 @@ function! s:compare_files_with_indicator(lhs, rhs)
   return 0
 endfunction
 
-function! s:readdir_with_indicator(path, show_hidden_files) abort
-  let files = readdir(a:path, 1)
-  if !a:show_hidden_files
-    let files = filter(files, {_, file -> file !~# '^\.'})
-  endif
-  let files = map(files, {_, file -> isdirectory(a:path . '/' . file) ? file . '/' : file})
-  let files = sort(files, function('s:compare_files_with_indicator'))
-  return files
-endfunction
-
-call b:app.init()
+call b:app.start()
 " appscript:end
 EOF
 }
 
 do_output_wrapper_script() {
-    local shell=$1
-    case $shell in
-        bash)
-            cat <<EOF
+  local shell=$1
+  case $shell in
+    bash)
+      cat <<EOF
 ad() {
     if [[ \$# -ge 1 ]]; then
         command -- ad "\$@"
@@ -125,30 +127,30 @@ ad() {
     if [[ -n \$nextpath ]]; then
         cd "\$nextpath" || return
     fi
-}
+  }
 EOF
-            ;;
-        *)
-            printf "%s\n" "${0##*/}: unsupported shell '$1'" >&2
-            exit 1
-            ;;
-    esac
+      ;;
+    *)
+      printf "%s\n" "${0##*/}: unsupported shell '$1'" >&2
+      exit 1
+      ;;
+  esac
 }
 
 do_normal() {
-    cat <(SAVE_FILE=>(cat) vim -u NONE -N -n -i NONE -S <(print_appscript) < /dev/tty > /dev/tty)
+  cat <(SAVE_FILE=>(cat) vim -u NONE -N -n -i NONE -S <(appscript) < /dev/tty > /dev/tty)
 }
 
 if [[ $# -eq 1 && $1 == --help ]]; then
-    print_usage
-    exit 0
+  usage
+  exit
 elif [[ $# -eq 2 && ( $1 == -w || $1 == --wrapper ) ]]; then
-    do_output_wrapper_script "$2"
-    exit 0
+  do_output_wrapper_script "$2"
+  exit
 elif [[ $# -eq 0 ]]; then
-    do_normal
-    exit 0
+  do_normal
+  exit
 else
-    printf "%s\n" "${0##*/}: unrecognized argument pattern" >&2
-    exit 1
+  printf "%s\n" "${0##*/}: unrecognized argument pattern" >&2
+  exit 1
 fi
