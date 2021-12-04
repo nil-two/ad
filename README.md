@@ -8,7 +8,13 @@ $ pwd
 /path/to/directory
 
 $ ad
-(chdir to /another/directory)
+/path/to/directory
+
+dir1/
+dir2/
+file1.txt
+file2.txt
+(Up, up, up, move to another/, move to directory/, chdir and exit)
 
 $ pwd
 /another/directory/
