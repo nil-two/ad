@@ -6,6 +6,11 @@ function! b:app.start() abort
   setlocal noswapfile
   setlocal nowrap
 
+  highlight EndOfBuffer ctermfg=0
+  highlight AppCwd ctermfg=green
+  highlight AppDirectory ctermfg=blue
+  syntax match AppCwd /^\/.*$/
+  syntax match AppDirectory /^.\+\/$/
   nnoremap <buffer><silent> +     :<C-u>call b:app.toggle_show_hidden()<CR>
   nnoremap <buffer><silent> -     :<C-u>call b:app.up_directory()<CR>
   nnoremap <buffer><silent> <CR>  :<C-u>call b:app.move_directory()<CR>
