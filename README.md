@@ -17,7 +17,7 @@ file2.txt
 (Up, up, up, move to another/, move to directory/, chdir and exit)
 
 $ pwd
-/another/directory/
+/another/directory
 ```
 
 Usage
