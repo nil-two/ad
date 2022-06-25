@@ -3,6 +3,7 @@ let b:app = {}
 function! b:app.start() abort
   setlocal buftype=nofile
   setlocal bufhidden=hide
+  setlocal nomodifiable
   setlocal noswapfile
   setlocal nowrap
 
@@ -50,11 +51,13 @@ function! b:app.save_directory_and_exit() abort
 endfunction
 
 function! b:app.update_screen() abort
+  setlocal modifiable
   execute '%delete'
   let files = s:readdir_with_indicator(self.cwd, self.show_hidden_files)
   let lines = [self.cwd, ''] + files
   call setline(1, lines)
   call cursor(3, 1)
+  setlocal nomodifiable
 endfunction
 
 function! b:app.exit() abort
