@@ -168,6 +168,12 @@ do_normal() {
 if [[ $# -eq 1 && $1 == --help ]]; then
   usage
   exit
+elif [[ $# -eq 1 && $1 =~ ^'-w' ]]; then
+  do_output_wrapper_script "${1#-w}"
+  exit
+elif [[ $# -eq 1 && $1 =~ ^'--wrapper=' ]]; then
+  do_output_wrapper_script "${1#--wrapper=}"
+  exit
 elif [[ $# -eq 2 && ( $1 == -w || $1 == --wrapper ) ]]; then
   do_output_wrapper_script "$2"
   exit
