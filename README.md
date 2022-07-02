@@ -1,7 +1,7 @@
 ad
 ==
 
-![CI](https://github.com/kusabashira/ad/workflows/CI/badge.svg)
+[![CI](https://github.com/kusabashira/ad/actions/workflows/test.yml/badge.svg)](https://github.com/kusabashira/ad/actions/workflows/test.yml)
 
 Chdir with file-manager.
 
