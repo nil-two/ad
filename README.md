@@ -79,6 +79,12 @@ $ echo 'eval "$(ad -w bash)"' >> ~/.bashrc
 
 Note: In this example, `$HOME/bin` must be included in `$PATH`.
 
+Also, if you are using Bash, you can execute `ad` from a shortcut key by adding the following config to your .bashrc.
+
+```
+bind -x '"\C-g": ad'
+```
+
 Options
 -------
 
