@@ -13,6 +13,9 @@ options:
   -w, --wrapper=SHELL  output evaluatable script for SHELL and exit
       --help           print usage and exit
 
+supported-shells:
+  sh, ksh, bash, zsh, yash, fish
+
 keys:
   +       toggle show hidden files (default: OFF)
   -       chdir to the parent directory in file-manager
@@ -123,19 +126,32 @@ EOF
 do_output_wrapper_script() {
   local shell=$1
   case $shell in
-    bash)
+    sh|ksh|bash|zsh|yash)
       cat <<'      EOF' | sed 's/^ \{6\}//'
       ad() {
-        if [[ $# -ge 1 ]]; then
-            command -- ad "$@"
-            return
+        if [ "$#" -ge 1 ]; then
+          command -- ad "$@"
+          return
         fi
-        local nextpath
-        nextpath=$(command -- ad "$@")
-        if [[ -n $nextpath ]]; then
-            cd "$nextpath" || return
+        set -- "$(command -- ad "$@")"
+        if [ -n "$1" ]; then
+          cd "$1" || return
         fi
       }
+      EOF
+      ;;
+    fish)
+      cat <<'      EOF' | sed 's/^ \{6\}//'
+      function ad
+        if test (count $argv) -ge 1
+          command -- ad $argv
+          return
+        end
+        set -l nextpath (command ad)
+        if test -n "$nextpath"
+          cd $nextpath
+        end
+      end
       EOF
       ;;
     *)

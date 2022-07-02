@@ -34,21 +34,21 @@ options:
   -w, --wrapper=SHELL  output evaluatable script for SHELL and exit
       --help           print usage and exit
 
+supported-shells:
+  sh, ksh, bash, zsh, yash, fish
+
 keys:
   +       toggle show hidden files (default: OFF)
   -       chdir to the parent directory in file-manager
   <CR>    chdir to the directory in file-manager
   <C-g>   quit file-manager and chdir to the last directory
   q       quit file-manager
-
-supported-shells:
-  bash
 ```
 
 Requirements
 ------------
 
-- Bash
+- Bash (Even if you are not using Bash)
 - Vim
 
 Installation
@@ -58,9 +58,14 @@ Installation
 2. Make `ad` executable.
 3. Add following config to your shell's rc file.
 
-| Shell |                       |
-|-------|-----------------------|
-| bash  | eval "$(cdf -w bash)" |
+| Shell |                             |
+|-------|-----------------------------|
+| sh    | eval "$(ad -w sh)"          |
+| ksh   | eval "$(ad -w ksh)"         |
+| bash  | eval "$(ad -w bash)"        |
+| zsh   | eval "$(ad -w zsh)"         |
+| yash  | eval "$(ad -w yash)"        |
+| fish  | source (ad -w fish \| psub) |
 
 ### Example
 
@@ -80,8 +85,23 @@ Options
 Output evaluatable script for SHELL and exit.
 
 ```
+$ eval "$(ad -w sh)"
+(Enable shell integration for sh)
+
+$ eval "$(ad -w ksh)"
+(Enable shell integration for ksh)
+
 $ eval "$(ad -w bash)"
 (Enable shell integration for bash)
+
+$ eval "$(ad -w zsh)"
+(Enable shell integration for zsh)
+
+$ eval "$(ad -w yash)"
+(Enable shell integration for yash)
+
+$ source (ad -w fish | psub)
+(Enable shell integration for fish)
 ```
 
 ### --help

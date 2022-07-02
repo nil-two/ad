@@ -21,10 +21,46 @@ check_with_script() {
   script -qefc "$* > $stdout" /dev/null > /dev/null 2> "$stderr" || printf "%s\n" "$?" > "$exitcode"
 }
 
+@test 'ad wrapper: supports sh' {
+  cd "$tmpdir"
+  CMD=$cmd PATH="$PATH:$(dirname "$cmd")" check_with_script 'sh -c '"'"'eval "$("$CMD" -w sh)"; "$(basename "$CMD")"; pwd'"'"'' <<< $'--\x07'
+  [[ $(cat "$exitcode") == 0 ]]
+  [[ $(cat "$stdout") == $(realpath "$tmpdir/../..") ]]
+}
+
+@test 'ad wrapper: supports ksh' {
+  cd "$tmpdir"
+  CMD=$cmd PATH="$PATH:$(dirname "$cmd")" check_with_script 'ksh -c '"'"'eval "$("$CMD" -w ksh)"; "$(basename "$CMD")"; pwd'"'"'' <<< $'--\x07'
+  [[ $(cat "$exitcode") == 0 ]]
+  [[ $(cat "$stdout") == $(realpath "$tmpdir/../..") ]]
+}
+
 @test 'ad wrapper: supports bash' {
   cd "$tmpdir"
   CMD=$cmd PATH="$PATH:$(dirname "$cmd")" check_with_script 'bash -c '"'"'eval "$("$CMD" -w bash)"; "$(basename "$CMD")"; pwd'"'"'' <<< $'--\x07'
   [[ $(cat "$exitcode") == 0 ]]
+  [[ $(cat "$stdout") == $(realpath "$tmpdir/../..") ]]
+}
+
+@test 'ad wrapper: supports zsh' {
+  cd "$tmpdir"
+  CMD=$cmd PATH="$PATH:$(dirname "$cmd")" check_with_script 'zsh -c '"'"'eval "$("$CMD" -w zsh)"; "$(basename "$CMD")"; pwd'"'"'' <<< $'--\x07'
+  [[ $(cat "$exitcode") == 0 ]]
+  [[ $(cat "$stdout") == $(realpath "$tmpdir/../..") ]]
+}
+
+@test 'ad wrapper: supports yash' {
+  cd "$tmpdir"
+  CMD=$cmd PATH="$PATH:$(dirname "$cmd")" check_with_script 'yash -c '"'"'eval "$("$CMD" -w yash)"; "$(basename "$CMD")"; pwd'"'"'' <<< $'--\x07'
+  [[ $(cat "$exitcode") == 0 ]]
+  [[ $(cat "$stdout") == $(realpath "$tmpdir/../..") ]]
+}
+
+@test 'ad wrapper: supports fish' {
+  cd "$tmpdir"
+  CMD=$cmd PATH="$PATH:$(dirname "$cmd")" check_with_script 'fish -c '"'"'source ("$CMD" -w fish | psub); eval (basename "$CMD"); pwd'"'"'' <<< $'--\x07'
+  [[ $(cat "$exitcode") == 0 ]]
+  cat "$stdout"
   [[ $(cat "$stdout") == $(realpath "$tmpdir/../..") ]]
 }
 
