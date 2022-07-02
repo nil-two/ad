@@ -8,8 +8,6 @@ exitcode=$BATS_TEST_DIRNAME/../tmp/exitcode
 
 setup() {
   mkdir -p -- "$tmpdir"
-  mkdir -p -- "$tmpdir/visible-directory"
-  mkdir -p -- "$tmpdir/.invisible-directory"
 }
 
 teardown() {
@@ -20,11 +18,10 @@ check_with_script() {
   printf "%s\n" "" > "$stdout"
   printf "%s\n" "" > "$stderr"
   printf "%s\n" "0" > "$exitcode"
-  script -qefc "$1 > $stdout" /dev/null > /dev/null 2> "$stderr" || printf "%s\n" "$?" > "$exitcode"
+  script -qefc "$* > $stdout" /dev/null > /dev/null 2> "$stderr" || printf "%s\n" "$?" > "$exitcode"
 }
 
 @test 'ad application: exit if q entered' {
-  ls
   check_with_script "$cmd" <<< "q"
   [[ $(cat "$exitcode") == 0 ]]
   [[ $(cat "$stdout") == '' ]]
@@ -39,6 +36,7 @@ check_with_script() {
 
 @test 'ad application: toggle show hidden files if + entered' {
   cd "$tmpdir"
+  mkdir -p -- "$tmpdir/.invisible-directory"
   check_with_script "$cmd" <<< $':nmap x <CR>\n+x\x07'
   [[ $(cat "$exitcode") == 0 ]]
   [[ $(cat "$stdout") == $(realpath "$tmpdir/.invisible-directory") ]]
@@ -53,6 +51,7 @@ check_with_script() {
 
 @test 'ad application: chdir to the direcotry on cursor if Enter entered' {
   cd "$tmpdir"
+  mkdir -p -- "$tmpdir/visible-directory"
   check_with_script "$cmd" <<< $':nmap x <CR>\nx\x07'
   [[ $(cat "$exitcode") == 0 ]]
   [[ $(cat "$stdout") == $(realpath "$tmpdir/visible-directory") ]]
