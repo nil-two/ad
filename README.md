@@ -1,6 +1,8 @@
 ad
 ==
 
+![CI](https://github.com/kusabashira/ad/workflows/CI/badge.svg)
+
 Chdir with file-manager.
 
 ```
