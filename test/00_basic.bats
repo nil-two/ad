@@ -65,7 +65,7 @@ check() {
 @test 'ad: print error and exit if --unkown-option passed' {
   check "$cmd" --unkown-option
   [[ $(cat "$exitcode") == 1 ]]
-  [[ $(cat "$stderr") =~ ^'ad: unrecognized argument pattern' ]]
+  [[ $(cat "$stderr") =~ ^'ad: unrecognized option '"'"'--unkown-option'"'"'' ]]
 }
 
 # vim: ft=bash
