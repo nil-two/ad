@@ -1,3 +1,7 @@
+### v1.3.0 - 2022-07-02
+
+- Support tcsh.
+
 ### v1.2.0 - 2022-07-02
 
 - Support sh, ksh, zsh, yash, fish.
