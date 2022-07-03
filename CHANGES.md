@@ -1,6 +1,6 @@
 ### v1.2.0 - 2022-07-02
 
-- Support sh, ksh, zsh, yash, fish
+- Support sh, ksh, zsh, yash, fish.
 
 ### v1.1.0 - 2022-06-26
 
