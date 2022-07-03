@@ -63,4 +63,11 @@ check_wrapper_with_script() {
   [[ $(cat "$stdout") == $(realpath "$tmpdir/../..") ]]
 }
 
+@test 'ad wrapper: supports tcsh' {
+  cd "$tmpdir"
+  check_wrapper_with_script 'tcsh' <<< $'set prompt="%/:"\nad -w tcsh | source /dev/stdin\nad\n--\x07\nexit\n'
+  [[ $(cat "$exitcode") == 0 ]]
+  [[ $(cat "$stdout" | tail -1 | sed 's/:.*//') == $(realpath "$tmpdir/../..") ]]
+}
+
 # vim: ft=bash

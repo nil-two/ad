@@ -14,7 +14,7 @@ options:
       --help           print usage and exit
 
 supported-shells:
-  sh, ksh, bash, zsh, yash, fish
+  sh, ksh, bash, zsh, yash, fish, tcsh
 
 keys:
   +       toggle show hidden files (default: OFF)
@@ -154,6 +154,28 @@ print_wrapper_script() {
       end
       EOF
       ;;
+    tcsh)
+      cat <<'      EOF' | sed 's/^ \{6\}//'
+      alias ad '\\
+      set __fn_argv=(\!:*);\\
+      eval '"'"'\\
+      source /dev/stdin $__fn_argv:q <<__FN_BODY__\\
+        unset __fn_argv\\
+        if (\$#argv >= 1) then\\
+          \\ad \$*\\
+          exit\\
+        endif\\
+        set __adnextpath=\`\\ad\`\\
+        if (\$__adnextpath:q \\!= '"'"'"'"'"'"'"'"''"'"'"'"'"'"'"'"') then\\
+          cd \$__adnextpath:q\\
+        endif\\
+        unset __adnextpath\\
+      __FN_BODY__\\
+      '"'"'\\
+      '
+      true
+      EOF
+      ;;
   esac
 }
 
@@ -178,7 +200,7 @@ while [[ $# -ge 1 ]]; do
           ;;
       esac
       case $wrapper_target_shell in
-        sh|ksh|bash|zsh|yash|fish)
+        sh|ksh|bash|zsh|yash|fish|tcsh)
           ;;
         *)
           printf "%s\n" "${0##*/}: unsupported shell '$wrapper_target_shell'" >&2

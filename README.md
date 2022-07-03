@@ -37,7 +37,7 @@ options:
       --help           print usage and exit
 
 supported-shells:
-  sh, ksh, bash, zsh, yash, fish
+  sh, ksh, bash, zsh, yash, fish, tcsh
 
 keys:
   +       toggle show hidden files (default: OFF)
@@ -60,14 +60,15 @@ Installation
 2. Make `ad` executable.
 3. Add following config to your shell's rc file.
 
-| Shell |                             |
-|-------|-----------------------------|
-| sh    | eval "$(ad -w sh)"          |
-| ksh   | eval "$(ad -w ksh)"         |
-| bash  | eval "$(ad -w bash)"        |
-| zsh   | eval "$(ad -w zsh)"         |
-| yash  | eval "$(ad -w yash)"        |
-| fish  | source (ad -w fish \| psub) |
+| Shell |                                 |
+|-------|---------------------------------|
+| sh    | eval "$(ad -w sh)"              |
+| ksh   | eval "$(ad -w ksh)"             |
+| bash  | eval "$(ad -w bash)"            |
+| zsh   | eval "$(ad -w zsh)"             |
+| yash  | eval "$(ad -w yash)"            |
+| fish  | source (ad -w fish \| psub)     |
+| tcsh  | ad -w tcsh \| source /dev/stdin |
 
 ### Example
 
@@ -92,6 +93,16 @@ Options
 
 Output evaluatable script for SHELL and exit.
 
+Supported shells are as follows:
+
+- sh
+- ksh
+- bash
+- zsh
+- yash
+- fish
+- tcsh
+
 ```
 $ eval "$(ad -w sh)"
 (Enable shell integration for sh)
@@ -110,6 +121,10 @@ $ eval "$(ad -w yash)"
 
 $ source (ad -w fish | psub)
 (Enable shell integration for fish)
+
+$ ad -w tcsh | source /dev/stdin
+(Enable shell integration for tcsh)
+
 ```
 
 ### --help
