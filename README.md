@@ -33,7 +33,7 @@ usage:
 chdir with file-manager.
 
 options:
-  -w, --wrapper=SHELL  output evaluatable script for SHELL and exit
+  -w, --wrapper=SHELL  output wrapper script for SHELL and exit
       --help           print usage and exit
 
 supported-shells:
@@ -91,7 +91,8 @@ Options
 
 ### -w, --wrapper=SHELL
 
-Output evaluatable script for SHELL and exit.
+Output wrapper script for SHELL and exit.
+If you load the script, you will be able to chdir when you press `<C-g>` in file-manager.
 
 Supported shells are as follows:
 
@@ -124,7 +125,6 @@ $ source (ad -w fish | psub)
 
 $ ad -w tcsh | source /dev/stdin
 (Enable shell integration for tcsh)
-
 ```
 
 ### --help

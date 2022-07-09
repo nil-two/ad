@@ -10,7 +10,7 @@ usage:
 chdir with file-manager.
 
 options:
-  -w, --wrapper=SHELL  output evaluatable script for SHELL and exit
+  -w, --wrapper=SHELL  output wrapper script for SHELL and exit
       --help           print usage and exit
 
 supported-shells:
