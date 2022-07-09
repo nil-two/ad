@@ -20,7 +20,7 @@ function! b:app.start() abort
 
   let self.show_hidden_files = v:false
   let self.cwd               = getcwd()
-  let self.save_file         = getenv('SAVE_FILE')
+  let self.stdout            = getenv('STDOUT')
   call self.update_screen()
 endfunction
 
@@ -44,8 +44,8 @@ function! b:app.move_directory() abort
 endfunction
 
 function! b:app.save_directory_and_exit() abort
-  if filewritable(self.save_file)
-    call writefile([self.cwd], self.save_file)
+  if filewritable(self.stdout)
+    call writefile([self.cwd], self.stdout)
   endif
   exit
 endfunction

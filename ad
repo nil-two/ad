@@ -50,7 +50,7 @@ function! b:app.start() abort
 
   let self.show_hidden_files = v:false
   let self.cwd               = getcwd()
-  let self.save_file         = getenv('SAVE_FILE')
+  let self.stdout            = getenv('STDOUT')
   call self.update_screen()
 endfunction
 
@@ -74,8 +74,8 @@ function! b:app.move_directory() abort
 endfunction
 
 function! b:app.save_directory_and_exit() abort
-  if filewritable(self.save_file)
-    call writefile([self.cwd], self.save_file)
+  if filewritable(self.stdout)
+    call writefile([self.cwd], self.stdout)
   endif
   exit
 endfunction
@@ -231,4 +231,4 @@ if [[ -n $wrapper_target_shell ]]; then
   print_wrapper_script "$wrapper_target_shell"
   exit 0
 fi
-cat <(SAVE_FILE=>(cat) vim -u NONE -N -n -i NONE -S <(print_appscript) < /dev/tty > /dev/tty)
+cat <(STDOUT=>(cat) vim -u NONE -N -n -i NONE -S <(print_appscript) < /dev/tty > /dev/tty)
