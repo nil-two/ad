@@ -18,7 +18,7 @@ function! b:app.start() abort
   nnoremap <buffer><silent> <C-g> :<C-u>call b:app.save_directory_and_exit()<CR>
   nnoremap <buffer><silent> q     :<C-u>call b:app.exit()<CR>
 
-  let self.show_hidden_files = v:false
+  let self.show_hidden_files = 0
   let self.cwd               = getcwd()
   let self.stdout            = getenv('STDOUT')
   call self.update_screen()
@@ -67,9 +67,9 @@ endfunction
 function! s:readdir_with_indicator(path, show_hidden_files) abort
   let files = map(filter(split(glob(a:path . '/.*'), "\n"), 'v:val !~# "/.$" && v:val !~# "/..$"') + split(glob(a:path . '/*'), "\n"), 'v:val[len(a:path)+1:]')
   if !a:show_hidden_files
-    let files = filter(files, {_, file -> file !~# '^\.'})
+    let files = filter(files, 'v:val !~# "^\\."')
   endif
-  let files = map(files, {_, file -> isdirectory(a:path . '/' . file) ? file . '/' : file})
+  let files = map(files, 'isdirectory(a:path . "/" . v:val) ? v:val . "/" : v:val')
   let files = sort(files, function('s:compare_files_with_indicator'))
   return files
 endfunction
