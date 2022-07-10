@@ -65,7 +65,7 @@ function! b:app.exit() abort
 endfunction
 
 function! s:readdir_with_indicator(path, show_hidden_files) abort
-  let files = readdir(a:path, 1)
+  let files = map(filter(split(glob(a:path . '/.*'), "\n"), 'v:val !~# "/.$" && v:val !~# "/..$"') + split(glob(a:path . '/*'), "\n"), 'v:val[len(a:path)+1:]')
   if !a:show_hidden_files
     let files = filter(files, {_, file -> file !~# '^\.'})
   endif
@@ -74,7 +74,7 @@ function! s:readdir_with_indicator(path, show_hidden_files) abort
   return files
 endfunction
 
-function! s:compare_files_with_indicator(lhs, rhs)
+function! s:compare_files_with_indicator(lhs, rhs) abort
   if a:lhs[-1:] ==# '/' && a:rhs[-1:] !=# '/'
     return -1
   elseif a:lhs[-1:] !=# '/' && a:rhs[-1:] ==# '/'
