@@ -57,4 +57,11 @@ check_with_script() {
   [[ $(cat "$stdout") == $(realpath "$tmpdir/visible-directory") ]]
 }
 
+@test 'ad application: do nothing if - entered when in root directory' {
+  cd "/usr/bin"
+  check_with_script "$cmd" <<< $':nmap x <CR>\n:cmap y <CR>\n---/^bin$yx\x07'
+  [[ $(cat "$exitcode") == 0 ]]
+  [[ $(cat "$stdout") == '/bin' ]]
+}
+
 # vim: ft=bash
