@@ -1,3 +1,8 @@
+### v1.4.0 - 2022-07-30
+
+- Support macOS.
+- Suppress message on moving directory.
+
 ### v1.3.0 - 2022-07-02
 
 - Support tcsh.
