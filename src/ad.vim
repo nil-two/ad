@@ -20,7 +20,7 @@ function! b:app.start() abort
 
   let self.show_hidden_files = 0
   let self.cwd               = getcwd()
-  let self.stdout            = getenv('STDOUT')
+  let self.stdout            = $STDOUT
   call self.update_screen()
 endfunction
 
