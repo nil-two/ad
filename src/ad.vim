@@ -52,7 +52,7 @@ endfunction
 
 function! b:app.update_screen() abort
   setlocal modifiable
-  execute '%delete'
+  silent execute '%delete'
   let files = s:readdir_with_indicator(self.cwd, self.show_hidden_files)
   let lines = [self.cwd, ''] + files
   call setline(1, lines)
