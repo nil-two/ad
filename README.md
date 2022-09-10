@@ -1,7 +1,7 @@
 ad
 ==
 
-[![CI](https://github.com/nil2nekoni/ad/actions/workflows/test.yml/badge.svg)](https://github.com/nil2nekoni/ad/actions/workflows/test.yml)
+[![CI](https://github.com/nil-two/ad/actions/workflows/test.yml/badge.svg)](https://github.com/nil-two/ad/actions/workflows/test.yml)
 
 Chdir with file-manager.
 
@@ -73,7 +73,7 @@ Installation
 ### Example
 
 ```
-$ curl -L https://raw.githubusercontent.com/nil2nekoni2/ad/master/ad > ~/bin/ad
+$ curl -L https://raw.githubusercontent.com/nil-two/ad/master/ad > ~/bin/ad
 $ chmod +x ~/bin/ad
 $ echo 'eval "$(ad -w bash)"' >> ~/.bashrc
 ```
