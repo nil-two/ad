@@ -179,38 +179,38 @@ print_wrapper_script() {
   esac
 }
 
-wrapper_target_shell=
+opt_wrapper=
+opt_help=false
 while [[ $# -ge 1 ]]; do
   case $1 in
-    -w|-w*|--wrapper|--wrapper=*)
+    -w*|--wrapper|--wrapper=*)
       case $1 in
         -w|--wrapper)
           if [[ $# -lt 2 ]]; then
             printf "%s\n" "${0##*/}: option requires an argument -- '${1##*-}'" >&2
             exit 1
           fi
-          wrapper_target_shell=$2
+          opt_wrapper=$2
           shift
           ;;
         -w*)
-          wrapper_target_shell=${1#-w}
+          opt_wrapper=${1#-w}
           ;;
         --wrapper=*)
-          wrapper_target_shell=${1#--wrapper=}
+          opt_wrapper=${1#--wrapper=}
           ;;
       esac
-      case $wrapper_target_shell in
+      case $opt_wrapper in
         sh|ksh|bash|zsh|yash|fish|tcsh)
           ;;
         *)
-          printf "%s\n" "${0##*/}: unsupported shell '$wrapper_target_shell'" >&2
+          printf "%s\n" "${0##*/}: unsupported shell '$opt_wrapper'" >&2
           exit 1
           ;;
       esac
       ;;
     --help)
-      print_usage
-      exit 0
+      opt_help=true
       ;;
     --)
       shift
@@ -227,8 +227,13 @@ while [[ $# -ge 1 ]]; do
   shift
 done
 
-if [[ -n $wrapper_target_shell ]]; then
-  print_wrapper_script "$wrapper_target_shell"
+if [[ $opt_help = true ]]; then
+  print_usage
   exit 0
 fi
+if [[ -n $opt_wrapper ]]; then
+  print_wrapper_script "$opt_wrapper"
+  exit 0
+fi
+
 cat <(STDOUT=>(cat) vim -u NONE -N -n -i NONE -S <(print_appscript) < /dev/tty > /dev/tty)

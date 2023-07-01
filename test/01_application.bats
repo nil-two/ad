@@ -59,7 +59,8 @@ check_with_script() {
 
 @test 'ad application: do nothing if - entered when in root directory' {
   cd "/usr/bin"
-  check_with_script "$cmd" <<< $':nmap x <CR>\n:cmap y <CR>\n---/^bin$yx\x07'
+  check_with_script "$cmd" <<< $':nmap x <CR>\n:cmap y <CR>\n---/^bin/$yx\x07'
+  cat "$stdout"
   [[ $(cat "$exitcode") == 0 ]]
   [[ $(cat "$stdout") == '/bin' ]]
 }
