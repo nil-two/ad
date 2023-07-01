@@ -11,7 +11,7 @@ options:
       --help             print usage and exit
 
 supported-shells:
-  sh
+  sh, bash
 
 keys:
   +       toggle show hidden files (default: OFF)
@@ -134,6 +134,51 @@ print_wrapper_script() {
       }
       EOF
       ;;
+    bash)
+      cat <<'      EOF' | sed 's/^ \{6\}//'
+      ad() {
+        set -- "$(command ad "$@")"
+        if [ -d "$1" ]; then
+          cd "$1" || return 1
+        elif [ -n "$1" ]; then
+          printf "%s\n" "$1"
+        fi
+      }
+
+      _ad() {
+        local cur prev words cword split
+        _init_completion -s || return
+      
+        local options=(
+          '--wrapper='
+          '--help'
+        )
+        local wrapper_target_shells=(
+          'sh'
+          'bash'
+        )
+      
+        case $prev in
+          -w|--wrapper)
+            COMPREPLY=( $(compgen -W '"${wrapper_target_shells[@]}"' -- "$cur") )
+            return
+            ;;
+        esac
+        $split && return
+      
+        case $cur in
+          -*)
+            COMPREPLY=( $(compgen -W '"${options[@]}"' -- "$cur") )
+            [[ ${COMPREPLY[0]} == *= ]] && compopt -o nospace
+            ;;
+          *)
+            _filedir
+            ;;
+        esac
+      }
+      complete -F _ad ad
+      EOF
+      ;;
     *)
       printf "%s\n" "${0##*/}: unsupported shell '$1'" >&2
       exit 1
@@ -163,7 +208,7 @@ while [[ $# -ge 1 ]]; do
           ;;
       esac
       case $opt_wrapper in
-        sh)
+        sh|bash)
           ;;
         *)
           printf "%s\n" "${0##*/}: unsupported shell '$opt_wrapper'" >&2

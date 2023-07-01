@@ -28,4 +28,11 @@ check_wrapper_with_script() {
   [[ $(cat "$stdout") == $(realpath "$tmpdir/../..") ]]
 }
 
+@test 'ad wrapper: supports bash' {
+  cd "$tmpdir"
+  check_wrapper_with_script 'bash -c '"'"'eval "$("$CMD" -w bash)"; "$(basename "$CMD")"; pwd'"'"'' <<< $'--\x07'
+  [[ $(cat "$exitcode") == 0 ]]
+  [[ $(cat "$stdout") == $(realpath "$tmpdir/../..") ]]
+}
+
 # vim: ft=bash
