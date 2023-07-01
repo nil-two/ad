@@ -124,21 +124,22 @@ EOF
 }
 
 print_wrapper_script() {
-  local shell=$1
-  case $shell in
+  case $1 in
     sh)
       cat <<'      EOF' | sed 's/^ \{6\}//'
       ad() {
-        if [ "$#" -ge 1 ]; then
-          command -- ad "$@"
-          return
-        fi
-        set -- "$(command -- ad "$@")"
-        if [ -n "$1" ]; then
-          cd "$1" || return
+        set -- "$(command ad "$@")"
+        if [ -d "$1" ]; then
+          cd "$1" || return 1
+        elif [ -n "$1" ]; then
+          printf "%s\n" "$1"
         fi
       }
       EOF
+      ;;
+    *)
+      printf "%s\n" "${0##*/}: unsupported shell '$1'" >&2
+      exit 1
       ;;
   esac
 }
