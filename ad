@@ -3,15 +3,12 @@ set -eu
 
 print_usage() {
   cat <<EOF
-usage:
-  ${0##*/}
-  ${0##*/} -w|--wrapper <SHELL>
-  ${0##*/} --help
+usage: ${0##*/} [<option(s)>]
 chdir with file-manager.
 
 options:
-  -w, --wrapper=SHELL  output wrapper script for SHELL and exit
-      --help           print usage and exit
+  -w, --wrapper=<shell>  output the wrapper script for the shell and exit
+      --help             print usage and exit
 
 supported-shells:
   sh
