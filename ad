@@ -14,7 +14,7 @@ options:
       --help           print usage and exit
 
 supported-shells:
-  sh, ksh, bash, zsh, yash, fish, tcsh
+  sh, fish, tcsh
 
 keys:
   +       toggle show hidden files (default: OFF)
@@ -126,7 +126,7 @@ EOF
 print_wrapper_script() {
   local shell=$1
   case $shell in
-    sh|ksh|bash|zsh|yash)
+    sh)
       cat <<'      EOF' | sed 's/^ \{6\}//'
       ad() {
         if [ "$#" -ge 1 ]; then
@@ -201,7 +201,7 @@ while [[ $# -ge 1 ]]; do
           ;;
       esac
       case $opt_wrapper in
-        sh|ksh|bash|zsh|yash|fish|tcsh)
+        sh|fish|tcsh)
           ;;
         *)
           printf "%s\n" "${0##*/}: unsupported shell '$opt_wrapper'" >&2

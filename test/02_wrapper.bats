@@ -28,34 +28,6 @@ check_wrapper_with_script() {
   [[ $(cat "$stdout") == $(realpath "$tmpdir/../..") ]]
 }
 
-@test 'ad wrapper: supports ksh' {
-  cd "$tmpdir"
-  check_wrapper_with_script 'ksh -c '"'"'eval "$("$CMD" -w ksh)"; "$(basename "$CMD")"; pwd'"'"'' <<< $'--\x07'
-  [[ $(cat "$exitcode") == 0 ]]
-  [[ $(cat "$stdout") == $(realpath "$tmpdir/../..") ]]
-}
-
-@test 'ad wrapper: supports bash' {
-  cd "$tmpdir"
-  check_wrapper_with_script 'bash -c '"'"'eval "$("$CMD" -w bash)"; "$(basename "$CMD")"; pwd'"'"'' <<< $'--\x07'
-  [[ $(cat "$exitcode") == 0 ]]
-  [[ $(cat "$stdout") == $(realpath "$tmpdir/../..") ]]
-}
-
-@test 'ad wrapper: supports zsh' {
-  cd "$tmpdir"
-  check_wrapper_with_script 'zsh -c '"'"'eval "$("$CMD" -w zsh)"; "$(basename "$CMD")"; pwd'"'"'' <<< $'--\x07'
-  [[ $(cat "$exitcode") == 0 ]]
-  [[ $(cat "$stdout") == $(realpath "$tmpdir/../..") ]]
-}
-
-@test 'ad wrapper: supports yash' {
-  cd "$tmpdir"
-  check_wrapper_with_script 'yash -c '"'"'eval "$("$CMD" -w yash)"; "$(basename "$CMD")"; pwd'"'"'' <<< $'--\x07'
-  [[ $(cat "$exitcode") == 0 ]]
-  [[ $(cat "$stdout") == $(realpath "$tmpdir/../..") ]]
-}
-
 @test 'ad wrapper: supports fish' {
   cd "$tmpdir"
   check_wrapper_with_script 'fish -c '"'"'source ("$CMD" -w fish | psub); eval (basename "$CMD"); pwd'"'"'' <<< $'--\x07'

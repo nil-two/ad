@@ -32,26 +32,26 @@ check() {
   [[ $(cat "$stdout") =~ ^'usage:' ]]
 }
 
-@test 'ad: print wrapper script if -w bash passed' {
-  check "$cmd" -w bash
+@test 'ad: print wrapper script if -w sh passed' {
+  check "$cmd" -w sh
   [[ $(cat "$exitcode") == 0 ]]
   [[ $(cat "$stdout") =~ ^'ad() {' ]]
 }
 
-@test 'ad: print wrapper script if -wbash passed' {
-  check "$cmd" -wbash
+@test 'ad: print wrapper script if -wsh passed' {
+  check "$cmd" -wsh
   [[ $(cat "$exitcode") == 0 ]]
   [[ $(cat "$stdout") =~ ^'ad() {' ]]
 }
 
-@test 'ad: print wrapper script if --wrapper bash passed' {
-  check "$cmd" --wrapper bash
+@test 'ad: print wrapper script if --wrapper sh passed' {
+  check "$cmd" --wrapper sh
   [[ $(cat "$exitcode") == 0 ]]
   [[ $(cat "$stdout") =~ ^'ad() {' ]]
 }
 
-@test 'ad: print wrapper script if --wrapper=bash passed' {
-  check "$cmd" --wrapper=bash
+@test 'ad: print wrapper script if --wrapper=sh passed' {
+  check "$cmd" --wrapper=sh
   [[ $(cat "$exitcode") == 0 ]]
   [[ $(cat "$stdout") =~ ^'ad() {' ]]
 }
