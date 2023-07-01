@@ -1,3 +1,8 @@
+### v2.0.0 - 2023-07-02
+
+- Handle second and subsequent arguments correctly.
+- Drop supports for macOS, fish, tcsh...
+
 ### v1.4.0 - 2022-07-30
 
 - Support macOS.
