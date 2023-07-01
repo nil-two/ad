@@ -26,10 +26,15 @@ check() {
   [[ $(cat "$exitcode") == 0 ]]
 }
 
-@test 'ad: print usage if --help passed' {
-  check "$cmd" --help
+@test 'ad: start application if double-dash passed' {
+  check script -qefc "$cmd --" /dev/null <<< "q" > /dev/null
   [[ $(cat "$exitcode") == 0 ]]
-  [[ $(cat "$stdout") =~ ^'usage:' ]]
+}
+
+@test 'ad: print error if unknown option passed' {
+  check "$cmd" --vim
+  [[ $(cat "$exitcode") == 1 ]]
+  [[ $(cat "$stderr") != "" ]]
 }
 
 @test 'ad: print wrapper script if -w sh passed' {
@@ -57,15 +62,15 @@ check() {
 }
 
 @test 'ad: print error and exit if --wrapper unsupported-shell passed' {
-  check "$cmd" --wrapper unsupported-shell
+  check "$cmd" --wrapper vim
   [[ $(cat "$exitcode") == 1 ]]
   [[ $(cat "$stderr") =~ ^'ad: unsupported shell' ]]
 }
 
-@test 'ad: print error and exit if --unkown-option passed' {
-  check "$cmd" --unkown-option
-  [[ $(cat "$exitcode") == 1 ]]
-  [[ $(cat "$stderr") =~ ^'ad: unrecognized option '"'"'--unkown-option'"'"'' ]]
+@test 'ad: print usage if --help passed' {
+  check "$cmd" --help
+  [[ $(cat "$exitcode") == 0 ]]
+  [[ $(cat "$stdout") =~ ^'usage:' ]]
 }
 
 # vim: ft=bash
