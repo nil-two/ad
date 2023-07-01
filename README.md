@@ -26,18 +26,15 @@ Usage
 -----
 
 ```
-usage:
-  ad
-  ad -w|--wrapper <SHELL>
-  ad --help
+$ ad [<option(s)>]
 chdir with file-manager.
 
 options:
-  -w, --wrapper=SHELL  output wrapper script for SHELL and exit
-      --help           print usage and exit
+  -w, --wrapper=<shell>  output the wrapper script for the shell and exit
+      --help             print usage and exit
 
 supported-shells:
-  sh, ksh, bash, zsh, yash, fish, tcsh
+  sh, bash
 
 keys:
   +       toggle show hidden files (default: OFF)
@@ -58,17 +55,12 @@ Installation
 
 1. Copy `ad` into your `$PATH`.
 2. Make `ad` executable.
-3. Add following config to your shell's rc file.
+3. Add following config to your shell's rcfile.
 
-| Shell |                                 |
-|-------|---------------------------------|
-| sh    | eval "$(ad -w sh)"              |
-| ksh   | eval "$(ad -w ksh)"             |
-| bash  | eval "$(ad -w bash)"            |
-| zsh   | eval "$(ad -w zsh)"             |
-| yash  | eval "$(ad -w yash)"            |
-| fish  | source (ad -w fish \| psub)     |
-| tcsh  | ad -w tcsh \| source /dev/stdin |
+| Shell |                      |
+|-------|----------------------|
+| sh    | eval "$(ad -w sh)"   |
+| bash  | eval "$(ad -w bash)" |
 
 ### Example
 
@@ -80,7 +72,7 @@ $ echo 'eval "$(ad -w bash)"' >> ~/.bashrc
 
 Note: In this example, `$HOME/bin` must be included in `$PATH`.
 
-Also, if you are using Bash, you can execute `ad` from a shortcut key by adding the following config to your .bashrc.
+Also, if you are using Bash, you can execute `ad` from a shortcut key by adding the following config to your `.bashrc`.
 
 ```
 bind -x '"\C-g": ad'
@@ -89,42 +81,22 @@ bind -x '"\C-g": ad'
 Options
 -------
 
-### -w, --wrapper=SHELL
+### -w, --wrapper=\<shell\>
 
-Output wrapper script for SHELL and exit.
+Output the wrapper script for the `shell` and exit.
 If you load the script, you will be able to chdir when you press `<C-g>` in file-manager.
 
 Supported shells are as follows:
 
 - sh
-- ksh
 - bash
-- zsh
-- yash
-- fish
-- tcsh
 
 ```
 $ eval "$(ad -w sh)"
 (Enable shell integration for sh)
 
-$ eval "$(ad -w ksh)"
-(Enable shell integration for ksh)
-
 $ eval "$(ad -w bash)"
 (Enable shell integration for bash)
-
-$ eval "$(ad -w zsh)"
-(Enable shell integration for zsh)
-
-$ eval "$(ad -w yash)"
-(Enable shell integration for yash)
-
-$ source (ad -w fish | psub)
-(Enable shell integration for fish)
-
-$ ad -w tcsh | source /dev/stdin
-(Enable shell integration for tcsh)
 ```
 
 ### --help
