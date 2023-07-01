@@ -14,7 +14,7 @@ options:
       --help           print usage and exit
 
 supported-shells:
-  sh, fish, tcsh
+  sh
 
 keys:
   +       toggle show hidden files (default: OFF)
@@ -140,42 +140,6 @@ print_wrapper_script() {
       }
       EOF
       ;;
-    fish)
-      cat <<'      EOF' | sed 's/^ \{6\}//'
-      function ad
-        if test (count $argv) -ge 1
-          command -- ad $argv
-          return
-        end
-        set -l nextpath (command ad)
-        if test -n "$nextpath"
-          cd $nextpath
-        end
-      end
-      EOF
-      ;;
-    tcsh)
-      cat <<'      EOF' | sed 's/^ \{6\}//'
-      alias ad '\\
-      set __fn_argv=(\!:*);\\
-      eval '"'"'\\
-      source /dev/stdin $__fn_argv:q <<__FN_BODY__\\
-        unset __fn_argv\\
-        if (\$#argv >= 1) then\\
-          \\ad \$*\\
-          exit\\
-        endif\\
-        set __adnextpath=\`\\ad\`\\
-        if (\$__adnextpath:q \\!= '"'"'"'"'"'"'"'"''"'"'"'"'"'"'"'"') then\\
-          cd \$__adnextpath:q\\
-        endif\\
-        unset __adnextpath\\
-      __FN_BODY__\\
-      '"'"'\\
-      '
-      true
-      EOF
-      ;;
   esac
 }
 
@@ -201,7 +165,7 @@ while [[ $# -ge 1 ]]; do
           ;;
       esac
       case $opt_wrapper in
-        sh|fish|tcsh)
+        sh)
           ;;
         *)
           printf "%s\n" "${0##*/}: unsupported shell '$opt_wrapper'" >&2
