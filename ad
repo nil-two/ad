@@ -22,7 +22,7 @@ keys:
 EOF
 }
 
-print_appscript() {
+print_app_script() {
   cat <<'EOF'
 " appscript:start
 let b:app = {}
@@ -176,6 +176,7 @@ print_wrapper_script() {
             ;;
         esac
       }
+
       complete -F _ad ad
       EOF
       ;;
@@ -243,4 +244,4 @@ if [[ -n $opt_wrapper ]]; then
   exit 0
 fi
 
-cat <(STDOUT=>(cat) vim -u NONE -N -n -i NONE -S <(print_appscript) < /dev/tty > /dev/tty)
+cat <(STDOUT=>(cat) vim -u NONE -N -n -i NONE -S <(print_app_script) < /dev/tty > /dev/tty)
