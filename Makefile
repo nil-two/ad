@@ -1,12 +1,12 @@
-.PHONY: all build test
+.PHONY: all embed lint test
 
 all:
 
-build:
-	bash script/embed_appscript.bash
+embed:
+	@bash script/embed.bash
 
 lint:
 	@bash script/lint.bash
 
-test: build
-	bats test
+test:
+	@bats test
