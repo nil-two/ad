@@ -37,31 +37,31 @@ check() {
   [[ $(cat "$stderr") != "" ]]
 }
 
-@test 'ad: print wrapper script if -w sh passed' {
+@test 'ad: print wrapper script if -w shell passed' {
   check "$cmd" -w sh
   [[ $(cat "$exitcode") == 0 ]]
   [[ $(cat "$stdout") =~ ^'ad() {' ]]
 }
 
-@test 'ad: print wrapper script if -wsh passed' {
+@test 'ad: print wrapper script if -wshell passed' {
   check "$cmd" -wsh
   [[ $(cat "$exitcode") == 0 ]]
   [[ $(cat "$stdout") =~ ^'ad() {' ]]
 }
 
-@test 'ad: print wrapper script if --wrapper sh passed' {
+@test 'ad: print wrapper script if --wrapper shell passed' {
   check "$cmd" --wrapper sh
   [[ $(cat "$exitcode") == 0 ]]
   [[ $(cat "$stdout") =~ ^'ad() {' ]]
 }
 
-@test 'ad: print wrapper script if --wrapper=sh passed' {
+@test 'ad: print wrapper script if --wrapper=shell passed' {
   check "$cmd" --wrapper=sh
   [[ $(cat "$exitcode") == 0 ]]
   [[ $(cat "$stdout") =~ ^'ad() {' ]]
 }
 
-@test 'ad: print error and exit if --wrapper unsupported-shell passed' {
+@test 'ad: print error if --wrapper unsupported-shell passed' {
   check "$cmd" --wrapper vim
   [[ $(cat "$exitcode") == 1 ]]
   [[ $(cat "$stderr") =~ ^'ad: unsupported shell' ]]
