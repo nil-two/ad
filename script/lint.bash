@@ -5,11 +5,11 @@ set -eu
 shellcheck ./ad
 
 # lint ad --wrapper ad output
-bash -c 'shellcheck <(echo '"'"'#!/bin/sh'"'"'; ./ad --wrapper sh)'
+shellcheck <(echo '#!/bin/sh'; ./ad --wrapper sh)
 
 # lint ad --wrapper bash output
 # NOTE:
 # SC2016: Allow expand notation in fixed string to allow expansion in compgen arguments
 # SC2034: Allow unused variables to allow variables used in compgen arguments
 # SC2207: Allow array=( $() ) to allow copy values from compgen output to COMPREPLY
-bash -c 'shellcheck -e SC2016,SC2034,SC2207 <(echo '"'"'#!/bin/bash'"'"'; ./ad --wrapper bash)'
+shellcheck -e SC2016,SC2034,SC2207 <(echo '#!/bin/bash'; ./ad --wrapper bash)
