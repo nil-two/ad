@@ -55,7 +55,7 @@ Installation
 
 1. Copy `ad` into your `$PATH`.
 2. Make `ad` executable.
-3. Add following config to your shell's rcfile.
+3. Add the following config to your shell's profile.
 
 | Shell |                      |
 |-------|----------------------|
@@ -93,10 +93,10 @@ Supported shells are as follows:
 
 ```
 $ eval "$(ad -w sh)"
-(Enable shell integration for sh)
+(Enable the shell integration for the shell compatible with Bourne Shell)
 
 $ eval "$(ad -w bash)"
-(Enable shell integration for bash)
+(Enable the shell integration for Bash)
 ```
 
 ### --help
