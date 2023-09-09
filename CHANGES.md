@@ -1,7 +1,7 @@
 ### v2.0.0 - 2023-07-02
 
 - Handle second and subsequent arguments correctly.
-- Drop supports for macOS, fish, tcsh...
+- Support only Bash and Bourne Shells.
 
 ### v1.4.0 - 2022-07-30
 
