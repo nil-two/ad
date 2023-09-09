@@ -11,7 +11,7 @@ options:
       --help             print usage and exit
 
 supported-shells:
-  sh, bash, zsh
+  sh, bash, zsh, yash
 
 keys:
   +       toggle show hidden files (default: OFF)
@@ -149,6 +149,7 @@ _ad() {
     sh
     bash
     zsh
+    yash
   )
 
   case $prev in
@@ -180,12 +181,36 @@ print_wrapper_script_for_zsh() {
 
 _ad() {
   _arguments \
-    '(-w --wrapper)'{-w,--wrapper}'[output the wrapper script for the shell and exit]: :_values '"'"'target shell'"'"' sh bash zsh' \
+    '(-w --wrapper)'{-w,--wrapper}'[output the wrapper script for the shell and exit]: :_values '"'"'target shell'"'"' sh bash zsh yash' \
     '(- *)--help[print usage and exit]' \
     && return 0
 }
 
 compdef _ad ad
+EOF
+}
+
+print_wrapper_script_for_yash() {
+  print_wrapper_script_for_sh
+  cat <<'EOF'
+
+function completion/ad {
+  typeset OPTIONS ARGOPT PREFIX
+  OPTIONS=(
+  'w: --wrapper:; output the wrapper script for the shell and exit'
+  '--help; print usage and exit'
+  )
+
+  command -f completion//parseoptions
+  case $ARGOPT in
+  (-)
+    command -f completion//completeoptions
+    ;;
+  (w|--wrapper)
+    complete -P "$PREFIX" -- sh bash zsh yash
+    ;;
+  esac
+}
 EOF
 }
 
@@ -199,6 +224,9 @@ print_wrapper_script() {
       ;;
     zsh)
       print_wrapper_script_for_zsh
+      ;;
+    yash)
+      print_wrapper_script_for_yash
       ;;
     *)
       printf "%s\n" "${0##*/}: unsupported shell '$1'" >&2
@@ -229,7 +257,7 @@ while [[ $# -ge 1 ]]; do
           ;;
       esac
       case $opt_wrapper in
-        sh|bash|zsh)
+        sh|bash|zsh|yash)
           ;;
         *)
           printf "%s\n" "${0##*/}: unsupported shell '$opt_wrapper'" >&2

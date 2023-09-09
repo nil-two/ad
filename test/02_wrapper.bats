@@ -42,4 +42,11 @@ check_wrapper_with_script() {
   [[ $(cat "$stdout") == $(realpath "$tmpdir/../..") ]]
 }
 
+@test 'ad wrapper: supports yash' {
+  cd "$tmpdir"
+  check_wrapper_with_script 'yash -c '"'"'eval "$("$CMD" -w yash)"; ad; pwd'"'"'' <<< $'--\x07'
+  [[ $(cat "$exitcode") == 0 ]]
+  [[ $(cat "$stdout") == $(realpath "$tmpdir/../..") ]]
+}
+
 # vim: ft=bash
