@@ -120,10 +120,8 @@ call b:app.start()
 EOF
 }
 
-print_wrapper_script() {
-  case $1 in
-    sh)
-      cat <<'EOF'
+print_wrapper_script_for_sh() {
+  cat <<'EOF'
 ad() {
   set -- "$(command ad "$@")"
   if [ -d "$1" ]; then
@@ -133,29 +131,23 @@ ad() {
   fi
 }
 EOF
-      ;;
-    bash)
-      cat <<'EOF'
-ad() {
-  set -- "$(command ad "$@")"
-  if [ -d "$1" ]; then
-    cd "$1" || return 1
-  elif [ -n "$1" ]; then
-    printf "%s\n" "$1"
-  fi
 }
+
+print_wrapper_script_for_bash() {
+  print_wrapper_script_for_sh
+  cat <<'EOF'
 
 _ad() {
   local cur prev words cword split
   _init_completion -s || return
 
   local options=(
-    '--wrapper='
-    '--help'
+    --wrapper=
+    --help
   )
   local wrapper_target_shells=(
-    'sh'
-    'bash'
+    sh
+    bash
   )
 
   case $prev in
@@ -179,6 +171,15 @@ _ad() {
 
 complete -F _ad ad
 EOF
+}
+
+print_wrapper_script() {
+  case $1 in
+    sh)
+      print_wrapper_script_for_sh
+      ;;
+    bash)
+      print_wrapper_script_for_bash
       ;;
     *)
       printf "%s\n" "${0##*/}: unsupported shell '$1'" >&2
