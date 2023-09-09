@@ -1,3 +1,10 @@
+### v2.1.0 - 2023-09-10
+
+- Resupport Zsh.
+- Resupport Yash.
+- Resupport Fish.
+- Add `AD_SHOW_HIDDEN_FILES` to show hidden files from the start.
+
 ### v2.0.0 - 2023-07-02
 
 - Handle second and subsequent arguments correctly.
