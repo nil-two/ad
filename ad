@@ -13,8 +13,11 @@ options:
 supported-shells:
   sh, bash, zsh, yash, fish
 
+environment-variables:
+  AD_SHOW_HIDDEN_FILES  show hidden files if set to true (default: false)
+
 keys:
-  +       toggle show hidden files (default: OFF)
+  +       toggle show hidden files
   -       chdir to the parent directory in file-manager
   <CR>    chdir to the directory in file-manager
   <C-g>   quit file-manager and chdir to the last directory
@@ -45,7 +48,7 @@ function! b:app.start() abort
   nnoremap <buffer><silent> <C-g> :<C-u>call b:app.save_directory_and_exit()<CR>
   nnoremap <buffer><silent> q     :<C-u>call b:app.exit()<CR>
 
-  let self.show_hidden_files = 0
+  let self.show_hidden_files = $AD_SHOW_HIDDEN_FILES ==# 'true'
   let self.cwd               = getcwd()
   let self.stdout            = $STDOUT
   call self.update_screen()

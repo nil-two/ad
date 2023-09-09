@@ -18,7 +18,7 @@ function! b:app.start() abort
   nnoremap <buffer><silent> <C-g> :<C-u>call b:app.save_directory_and_exit()<CR>
   nnoremap <buffer><silent> q     :<C-u>call b:app.exit()<CR>
 
-  let self.show_hidden_files = 0
+  let self.show_hidden_files = $AD_SHOW_HIDDEN_FILES ==# 'true'
   let self.cwd               = getcwd()
   let self.stdout            = $STDOUT
   call self.update_screen()

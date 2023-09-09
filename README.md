@@ -36,8 +36,11 @@ options:
 supported-shells:
   sh, bash, zsh, yash, fish
 
+environment-variables:
+  AD_SHOW_HIDDEN_FILES  show hidden files if set to true (default: false)
+
 keys:
-  +       toggle show hidden files (default: OFF)
+  +       toggle show hidden files
   -       chdir to the parent directory in file-manager
   <CR>    chdir to the directory in file-manager
   <C-g>   quit file-manager and chdir to the last directory
@@ -121,6 +124,19 @@ Print usage and exit.
 ```
 $ ad --help
 (Print usage)
+```
+
+Variables
+---------
+
+### `AD_SHOW_HIDDEN_FILES`
+
+Show hidden files from the start if set to true.
+The default value is false.
+
+```
+# Show hidden files from the beginning
+export AD_SHOW_HIDDEN_FILES=true
 ```
 
 License

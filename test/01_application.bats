@@ -36,7 +36,7 @@ check_with_script() {
 
 @test 'ad application: toggle show hidden files if + entered' {
   cd "$tmpdir"
-  mkdir -p -- "$tmpdir/.invisible-directory"
+  mkdir -p -- "$tmpdir/visible-directory" "$tmpdir/.invisible-directory"
   check_with_script "$cmd" <<< $':nmap x <CR>\n+x\x07'
   [[ $(cat "$exitcode") == 0 ]]
   [[ $(cat "$stdout") == $(realpath "$tmpdir/.invisible-directory") ]]
@@ -63,6 +63,22 @@ check_with_script() {
   cat "$stdout"
   [[ $(cat "$exitcode") == 0 ]]
   [[ $(cat "$stdout") == '/bin' ]]
+}
+
+@test 'ad application: show hidden files from the start if AD_SHOW_HIDDEN_FILES set to true' {
+  cd "$tmpdir"
+  mkdir -p -- "$tmpdir/visible-directory" "$tmpdir/.invisible-directory"
+  AD_SHOW_HIDDEN_FILES=true check_with_script "$cmd" <<< $':nmap x <CR>\nx\x07'
+  [[ $(cat "$exitcode") == 0 ]]
+  [[ $(cat "$stdout") == $(realpath "$tmpdir/.invisible-directory") ]]
+}
+
+@test 'ad application: hide hidden files from the start if AD_SHOW_HIDDEN_FILES set to false' {
+  cd "$tmpdir"
+  mkdir -p -- "$tmpdir/visible-directory" "$tmpdir/.invisible-directory"
+  AD_SHOW_HIDDEN_FILES=false check_with_script "$cmd" <<< $':nmap x <CR>\nx\x07'
+  [[ $(cat "$exitcode") == 0 ]]
+  [[ $(cat "$stdout") == $(realpath "$tmpdir/visible-directory") ]]
 }
 
 # vim: ft=bash
