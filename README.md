@@ -34,7 +34,7 @@ options:
       --help             print usage and exit
 
 supported-shells:
-  sh, bash
+  sh, bash, zsh
 
 keys:
   +       toggle show hidden files (default: OFF)
@@ -61,6 +61,7 @@ Installation
 |-------|----------------------|
 | sh    | eval "$(ad -w sh)"   |
 | bash  | eval "$(ad -w bash)" |
+| zsh   | eval "$(ad -w zsh)"  |
 
 ### Example
 
@@ -90,6 +91,7 @@ Supported shells are as follows:
 
 - sh
 - bash
+- zsh
 
 ```
 $ eval "$(ad -w sh)"
@@ -97,6 +99,9 @@ $ eval "$(ad -w sh)"
 
 $ eval "$(ad -w bash)"
 (Enable the shell integration for Bash)
+
+$ eval "$(ad -w zsh)"
+(Enable the shell integration for Zsh)
 ```
 
 ### --help

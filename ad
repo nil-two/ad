@@ -11,7 +11,7 @@ options:
       --help             print usage and exit
 
 supported-shells:
-  sh, bash
+  sh, bash, zsh
 
 keys:
   +       toggle show hidden files (default: OFF)
@@ -148,6 +148,7 @@ _ad() {
   local wrapper_target_shells=(
     sh
     bash
+    zsh
   )
 
   case $prev in
@@ -173,6 +174,21 @@ complete -F _ad ad
 EOF
 }
 
+print_wrapper_script_for_zsh() {
+  print_wrapper_script_for_sh
+  cat <<'EOF'
+
+_ad() {
+  _arguments \
+    '(-w --wrapper)'{-w,--wrapper}'[output the wrapper script for the shell and exit]: :_values '"'"'target shell'"'"' sh bash zsh' \
+    '(- *)--help[print usage and exit]' \
+    && return 0
+}
+
+compdef _ad ad
+EOF
+}
+
 print_wrapper_script() {
   case $1 in
     sh)
@@ -180,6 +196,9 @@ print_wrapper_script() {
       ;;
     bash)
       print_wrapper_script_for_bash
+      ;;
+    zsh)
+      print_wrapper_script_for_zsh
       ;;
     *)
       printf "%s\n" "${0##*/}: unsupported shell '$1'" >&2
@@ -210,7 +229,7 @@ while [[ $# -ge 1 ]]; do
           ;;
       esac
       case $opt_wrapper in
-        sh|bash)
+        sh|bash|zsh)
           ;;
         *)
           printf "%s\n" "${0##*/}: unsupported shell '$opt_wrapper'" >&2
