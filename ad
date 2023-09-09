@@ -11,7 +11,7 @@ options:
       --help             print usage and exit
 
 supported-shells:
-  sh, bash, zsh, yash
+  sh, bash, zsh, yash, fish
 
 keys:
   +       toggle show hidden files (default: OFF)
@@ -150,6 +150,7 @@ _ad() {
     bash
     zsh
     yash
+    fish
   )
 
   case $prev in
@@ -181,7 +182,7 @@ print_wrapper_script_for_zsh() {
 
 _ad() {
   _arguments \
-    '(-w --wrapper)'{-w,--wrapper}'[output the wrapper script for the shell and exit]: :_values '"'"'target shell'"'"' sh bash zsh yash' \
+    '(-w --wrapper)'{-w,--wrapper}'[output the wrapper script for the shell and exit]: :_values '"'"'target shell'"'"' sh bash zsh yash fish' \
     '(- *)--help[print usage and exit]' \
     && return 0
 }
@@ -207,10 +208,26 @@ function completion/ad {
     command -f completion//completeoptions
     ;;
   (w|--wrapper)
-    complete -P "$PREFIX" -- sh bash zsh yash
+    complete -P "$PREFIX" -- sh bash zsh yash fish
     ;;
   esac
 }
+EOF
+}
+
+print_wrapper_script_for_fish() {
+  cat <<'EOF'
+function ad
+  set -l output (command ad $argv)
+  if test -d "$output"
+    cd "$output" || return
+  else if test -n "$output"
+    printf "%s\n" $output
+  end
+end
+
+complete -c cdr -s w -l wrapper -xa '(printf "%s\tShell\n" sh bash zsh yash fish)' -d 'output the wrapper script for the shell and exit'
+complete -c cdr -l help -d 'print usage and exit'
 EOF
 }
 
@@ -227,6 +244,9 @@ print_wrapper_script() {
       ;;
     yash)
       print_wrapper_script_for_yash
+      ;;
+    fish)
+      print_wrapper_script_for_fish
       ;;
     *)
       printf "%s\n" "${0##*/}: unsupported shell '$1'" >&2
@@ -257,7 +277,7 @@ while [[ $# -ge 1 ]]; do
           ;;
       esac
       case $opt_wrapper in
-        sh|bash|zsh|yash)
+        sh|bash|zsh|yash|fish)
           ;;
         *)
           printf "%s\n" "${0##*/}: unsupported shell '$opt_wrapper'" >&2

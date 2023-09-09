@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - run: sudo apt-get install bats shellcheck vim zsh yash
+    - run: sudo apt-get install bats shellcheck vim zsh yash fish
     - run: vim --version
     - run: make lint
     - run: make test

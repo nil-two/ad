@@ -34,7 +34,7 @@ options:
       --help             print usage and exit
 
 supported-shells:
-  sh, bash, zsh, yash
+  sh, bash, zsh, yash, fish
 
 keys:
   +       toggle show hidden files (default: OFF)
@@ -57,12 +57,13 @@ Installation
 2. Make `ad` executable.
 3. Add the following config to your shell's profile.
 
-| Shell |                      |
-|-------|----------------------|
-| sh    | eval "$(ad -w sh)"   |
-| bash  | eval "$(ad -w bash)" |
-| zsh   | eval "$(ad -w zsh)"  |
-| yash  | eval "$(ad -w yash)" |
+| Shell |                             |
+|-------|-----------------------------|
+| sh    | eval "$(ad -w sh)"          |
+| bash  | eval "$(ad -w bash)"        |
+| zsh   | eval "$(ad -w zsh)"         |
+| yash  | eval "$(ad -w yash)"        |
+| fish  | source (ad -w yash \| psub) |
 
 ### Example
 
@@ -94,6 +95,7 @@ Supported shells are as follows:
 - bash
 - zsh
 - yash
+- fish
 
 ```
 $ eval "$(ad -w sh)"
@@ -107,6 +109,9 @@ $ eval "$(ad -w zsh)"
 
 $ eval "$(ad -w yash)"
 (Enable the shell integration for Yash)
+
+$ source (ad -w fish | psub)
+(Enable the shell integration for Fish)
 ```
 
 ### --help

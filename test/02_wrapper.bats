@@ -49,4 +49,11 @@ check_wrapper_with_script() {
   [[ $(cat "$stdout") == $(realpath "$tmpdir/../..") ]]
 }
 
+@test 'ad wrapper: supports fish' {
+  cd "$tmpdir"
+  check_wrapper_with_script 'fish -c '"'"'source ("$CMD" -w fish | psub); ad; pwd'"'"'' <<< $'--\x07'
+  [[ $(cat "$exitcode") == 0 ]]
+  [[ $(cat "$stdout") == $(realpath "$tmpdir/../..") ]]
+}
+
 # vim: ft=bash
